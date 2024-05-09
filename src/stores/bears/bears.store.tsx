@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 type Bear = {
   id: number;
@@ -12,9 +13,7 @@ type BearStore = {
 
   bears: Bear[];
 
-  computed: {
-    totalBears: number;
-  };
+  totalBears: () => number;
 
   increaseBlackBears: (by: number) => void;
   increasePolarkBears: (by: number) => void;
@@ -24,29 +23,32 @@ type BearStore = {
   clearBear: () => void;
 };
 
-export const useBrearsStore = create<BearStore>((set, get) => ({
-  blackBears: 10,
-  polarBears: 5,
-  pandaBears: 1,
+export const useBrearsStore = create<BearStore>()(
+  persist(
+    (set, get) => ({
+      blackBears: 10,
+      polarBears: 5,
+      pandaBears: 1,
 
-  bears: [{ id: 1, name: "Bear #1" }],
+      bears: [{ id: 1, name: "Bear #1" }],
 
-  computed: {
-    get totalBears() {
-      return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
-    },
-  },
+      totalBears: () => {
+        return get().blackBears + get().polarBears + get().pandaBears + get().bears.length;
+      },
 
-  increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
-  increasePolarkBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
-  increasePandakBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
+      increaseBlackBears: (by: number) => set((state) => ({ blackBears: state.blackBears + by })),
+      increasePolarkBears: (by: number) => set((state) => ({ polarBears: state.polarBears + by })),
+      increasePandakBears: (by: number) => set((state) => ({ pandaBears: state.pandaBears + by })),
 
-  addBear: () =>
-    set((state) => ({
-      bears: [
-        ...state.bears,
-        { id: state.bears.length + 1, name: `Bear #${state.bears.length + 1}` },
-      ],
-    })),
-  clearBear: () => set(() => ({ bears: [] })),
-}));
+      addBear: () =>
+        set((state) => ({
+          bears: [
+            ...state.bears,
+            { id: state.bears.length + 1, name: `Bear #${state.bears.length + 1}` },
+          ],
+        })),
+      clearBear: () => set(() => ({ bears: [] })),
+    }),
+    { name: "bear-store" }
+  )
+);

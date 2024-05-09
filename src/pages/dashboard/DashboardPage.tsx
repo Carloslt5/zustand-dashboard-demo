@@ -10,7 +10,7 @@ import { useBrearsStore } from "../../stores/bears/bears.store";
 import { usePersonStore } from "../../stores/person/person.store";
 
 export const Dashboard = () => {
-  const totalBears = useBrearsStore((state) => state.computed.totalBears);
+  const totalBears = useBrearsStore((state) => state.totalBears());
   const firsName = usePersonStore((state) => state.firstName);
 
   return (

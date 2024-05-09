@@ -15,11 +15,10 @@ const sessionAPI: StateStorage = {
   },
   setItem: async function (name: string, value: string): Promise<void> {
     try {
-      const data = await fetch(`${firebaseStorageApi}/${name}.json`, {
+      await fetch(`${firebaseStorageApi}/${name}.json`, {
         method: "PUT",
         body: value,
       }).then((res) => res.json());
-      console.log("data", data);
       return;
     } catch (error) {
       console.log("error", error);
