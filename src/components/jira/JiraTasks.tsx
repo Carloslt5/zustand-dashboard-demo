@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { DragEvent } from "react";
+import { DragEvent, useState } from "react";
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from "react-icons/io5";
 import { Task, TaskStatus } from "../../interfaces/task.type";
 import { SingleTask } from "../../pages/02-objects/SingleTask";
@@ -13,22 +13,21 @@ interface Props {
 
 export const JiraTasks = ({ title, tasks, value }: Props) => {
   const draggingTaskId = useTaskStore((state) => !!state.draggingTaskId);
-  console.log("🚀 --------- draggingTaskId", draggingTaskId);
+  const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log("onDragOver");
+    setOnDragOver(true);
   };
 
   const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log("onDragLeave");
+    setOnDragOver(false);
   };
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    console.log({ value });
-    console.log("onDrop");
+    setOnDragOver(false);
   };
 
   return (
@@ -40,6 +39,7 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
         "border-2 !text-black relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px] transition-all",
         {
           "border-blue-500 border-dotted": draggingTaskId,
+          "border-green-500 border-dotted": draggingTaskId && onDragOver,
         }
       )}
     >
