@@ -12,7 +12,9 @@ interface Props {
 }
 
 export const JiraTasks = ({ title, tasks, value }: Props) => {
-  const draggingTaskId = useTaskStore((state) => !!state.draggingTaskId);
+  const isDragging = useTaskStore((state) => !!state.draggingTaskId);
+  const changeTaskStatus = useTaskStore((state) => state.changeTaskStatus);
+  const draggingTaskId = useTaskStore((state) => state.draggingTaskId);
   const [onDragOver, setOnDragOver] = useState(false);
 
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
@@ -28,6 +30,7 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     setOnDragOver(false);
+    changeTaskStatus(draggingTaskId!, value);
   };
 
   return (
@@ -38,8 +41,8 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
       className={clsx(
         "border-2 !text-black relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px] transition-all",
         {
-          "border-blue-500 border-dotted": draggingTaskId,
-          "border-green-500 border-dotted": draggingTaskId && onDragOver,
+          "border-blue-500 border-dotted": isDragging,
+          "border-green-500 border-dotted": isDragging && onDragOver,
         }
       )}
     >
