@@ -1,15 +1,14 @@
-import {
-  IoCheckmarkCircleOutline,
-  IoEllipsisHorizontalOutline,
-  IoReorderTwoOutline,
-} from "react-icons/io5";
+import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from "react-icons/io5";
+import { Task, TaskStatus } from "../../interfaces/task.type";
+import { SingleTask } from "../../pages/02-objects/SingleTask";
 
 interface Props {
   title: string;
-  value: "pending" | "in-progress" | "done";
+  tasks: Task[];
+  value: TaskStatus;
 }
 
-export const JiraTasks = ({ title }: Props) => {
+export const JiraTasks = ({ title, tasks }: Props) => {
   return (
     <div className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]">
       {/* Task Header */}
@@ -31,23 +30,9 @@ export const JiraTasks = ({ title }: Props) => {
 
       {/* Task Items */}
       <div className="w-full h-full">
-        <div className="flex items-center justify-between p-2 mt-5">
-          <div className="flex items-center justify-center gap-2">
-            <p className="text-base font-bold text-navy-700">Tarea número 1</p>
-          </div>
-          <span className="w-6 h-6 cursor-pointer text-navy-700">
-            <IoReorderTwoOutline />
-          </span>
-        </div>
-
-        <div className="flex items-center justify-between p-2 mt-5">
-          <div className="flex items-center justify-center gap-2">
-            <p className="text-base font-bold text-navy-700">Tarea número 2</p>
-          </div>
-          <span className="w-6 h-6 cursor-pointer text-navy-700">
-            <IoReorderTwoOutline />
-          </span>
-        </div>
+        {tasks.map((task) => (
+          <SingleTask key={task.id} task={task} />
+        ))}
       </div>
     </div>
   );
