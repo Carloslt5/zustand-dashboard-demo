@@ -1,7 +1,9 @@
+import clsx from "clsx";
 import { DragEvent } from "react";
 import { IoCheckmarkCircleOutline, IoEllipsisHorizontalOutline } from "react-icons/io5";
 import { Task, TaskStatus } from "../../interfaces/task.type";
 import { SingleTask } from "../../pages/02-objects/SingleTask";
+import { useTaskStore } from "../../stores/tasks/task.store";
 
 interface Props {
   title: string;
@@ -10,6 +12,9 @@ interface Props {
 }
 
 export const JiraTasks = ({ title, tasks, value }: Props) => {
+  const draggingTaskId = useTaskStore((state) => !!state.draggingTaskId);
+  console.log("🚀 --------- draggingTaskId", draggingTaskId);
+
   const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     console.log("onDragOver");
@@ -31,7 +36,12 @@ export const JiraTasks = ({ title, tasks, value }: Props) => {
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
-      className="!text-black relative flex flex-col rounded-[20px]  bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px]"
+      className={clsx(
+        "border-2 !text-black relative flex flex-col rounded-[20px] bg-white bg-clip-border shadow-3xl shadow-shadow-500  w-full !p-4 3xl:p-![18px] transition-all",
+        {
+          "border-blue-500 border-dotted": draggingTaskId,
+        }
+      )}
     >
       {/* Task Header */}
       <div className="relative flex flex-row flex-wrap justify-between gap-2">
