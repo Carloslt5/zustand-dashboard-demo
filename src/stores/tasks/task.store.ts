@@ -1,6 +1,6 @@
 import { v4 as UUID } from "uuid";
 import { create, StateCreator } from "zustand";
-import { devtools } from "zustand/middleware";
+import { devtools, persist } from "zustand/middleware";
 import { immer } from "zustand/middleware/immer";
 import { Task, TaskStatus } from "../../interfaces/task.type";
 
@@ -66,7 +66,6 @@ const storeApi: StateCreator<TaskState, [["zustand/immer", never]]> = (set, get)
     // // muted state native zustand, spread operator
     // const task = get().tasks[taskId];
     // task.status = status;
-
     // set((state) => ({
     //   tasks: {
     //     ...state.tasks,
@@ -82,4 +81,6 @@ const storeApi: StateCreator<TaskState, [["zustand/immer", never]]> = (set, get)
   },
 });
 
-export const useTaskStore = create<TaskState>()(devtools(immer(storeApi)));
+export const useTaskStore = create<TaskState>()(
+  devtools(persist(immer(storeApi), { name: "task-store" }))
+);
